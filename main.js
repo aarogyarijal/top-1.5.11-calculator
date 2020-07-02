@@ -39,14 +39,14 @@ function operatorPressed(e){
 }
 
 function calculate(numbers, operators){
-    console.log(numbers);
-    console.log(operators);
+    // console.log(numbers);
+    // console.log(operators);
     //divide
     operatorIndex = operators.indexOf("divide");
     while(operatorIndex != -1){
         calculated = operate(numbers[operatorIndex], numbers[operatorIndex+1], "/");
         operators.splice(operatorIndex, 1);
-        numbers.splice(operatorIndex, 2);
+        numbers.splice(operatorIndex, 1);
         numbers[operatorIndex]=calculated;
         operatorIndex = operators.indexOf("divide");
         console.log(calculated);
@@ -56,7 +56,7 @@ function calculate(numbers, operators){
     while(operatorIndex != -1){
         calculated = operate(numbers[operatorIndex], numbers[operatorIndex+1], "*");
         operators.splice(operatorIndex, 1);
-        numbers.splice(operatorIndex, 2);
+        numbers.splice(operatorIndex, 1);
         numbers[operatorIndex]=calculated;
         operatorIndex = operators.indexOf("multiply");
         console.log(calculated);
@@ -65,11 +65,14 @@ function calculate(numbers, operators){
     //add
     operatorIndex = operators.indexOf("add");
     while(operatorIndex != -1){
+        console.log(operators);
+        console.log(numbers);
         calculated = operate(numbers[operatorIndex], numbers[operatorIndex+1], "+");
         operators.splice(operatorIndex, 1);
-        numbers.splice(operatorIndex, 2);
+        numbers.splice(operatorIndex, 1);
         numbers[operatorIndex]=calculated;
         operatorIndex = operators.indexOf("add");
+        console.log(operatorIndex);
         console.log(calculated);
     }
     //subtract
@@ -77,7 +80,7 @@ function calculate(numbers, operators){
     while(operatorIndex != -1){
         calculated = operate(numbers[operatorIndex], numbers[operatorIndex+1], "-");
         operators.splice(operatorIndex, 1);
-        numbers.splice(operatorIndex, 2);
+        numbers.splice(operatorIndex, 1);
         numbers[operatorIndex]=calculated;
         operatorIndex = operators.indexOf("subtract");
         console.log(calculated);
