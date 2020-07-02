@@ -6,6 +6,7 @@ let numbersCount = 0;
 let operatorsCount = 0;
 let inputNumbers=[];
 let inputOperators=[];
+let operatorAtOnce = 0;
 
 numbers.forEach(button => button.addEventListener("click", numberPressed));
 function numberPressed(e){
@@ -18,6 +19,7 @@ function numberPressed(e){
     }
     screenValue = screenValue*10+input*1;
     screen.textContent=screenValue;
+    operatorAtOnce = 0;
     
 }
 
@@ -28,13 +30,20 @@ function operatorPressed(e){
     if(!input) return;
     if(input=="clear"){
         clear();
-    }else{
+        return;
+    }
+    if(operatorAtOnce==0){
         inputOperators[operatorsCount] =input;
         inputNumbers[numbersCount] = screenValue;
         operatorsCount++;
         numbersCount++;
         screenValue = 0;
         screen.textContent="";
+        operatorAtOnce = 1;
+    }else{
+        inputOperators[operatorsCount-1] =input;
+        screenValue = 0;
+        operatorAtOnce = 1; 
     }
 }
 
@@ -98,6 +107,7 @@ function clear(){
     screen.textContent="";
     inputNumbers=[];
     inputOperators=[];
+    operatorAtOnce = 0;
 }
 function operate(a, b, operator){
     if(operator === "+"){
