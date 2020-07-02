@@ -13,6 +13,9 @@ function numberPressed(e){
     input = e.target.value;
     if(!input) return;
     if (input==="equal"){
+        if(operatorAtOnce==1){
+            inputOperators.splice(operatorsCount-1, 1)
+        }
         inputNumbers[numbersCount] = screenValue;
         screen.textContent= calculate(inputNumbers, inputOperators);
         return;
