@@ -8,11 +8,17 @@ let inputNumbers=[];
 let inputOperators=[];
 let operatorAtOnce = 0;
 
+//listening for number input by click
 numbers.forEach(button => button.addEventListener("click", numberPressed));
 function numberPressed(e){
     input = e.target.value;
     if(!input) return;
-    if (input==="equal"){
+    passNumber(input);    
+}
+
+//updating number based on recent input
+function passNumber(input){
+    if (input==="equal" || input=="="){
         if(operatorAtOnce==1){
             inputOperators.splice(operatorsCount-1, 1)
         }
@@ -23,59 +29,83 @@ function numberPressed(e){
     screenValue = screenValue*10+input*1;
     screen.textContent=screenValue;
     operatorAtOnce = 0;
-    
 }
 
+//listening for operator input by click
 operators.forEach(button => button.addEventListener("click", operatorPressed));
 function operatorPressed(e){
     input = e.target.value;
     console.log(input);
     if(!input) return;
-    if(input=="clear"){
+    passOperator(input);
+    
+}
+
+//updating operators array & storing current number
+function passOperator(input){
+    if(input=="clear" || input=="c"){
         clear();
-        return;
-    }
-    if(operatorAtOnce==0){
+    }else{
         inputOperators[operatorsCount] =input;
         inputNumbers[numbersCount] = screenValue;
         operatorsCount++;
         numbersCount++;
         screenValue = 0;
         screen.textContent="";
-        operatorAtOnce = 1;
-    }else{
-        inputOperators[operatorsCount-1] =input;
-        screenValue = 0;
-        operatorAtOnce = 1; 
     }
 }
+
+//listening for key presses
+document.addEventListener('keydown', keyPressed);
+function keyPressed(e){
+    rawInput = e.key;
+    console.log(rawInput)
+    input=rawInput.toLowerCase();
+    console.log(input*1!=NaN);
+    if(!input) return;
+    if (input==="="){
+        if(operatorAtOnce==1){
+            inputOperators.splice(operatorsCount-1, 1)
+        }
+        inputNumbers[numbersCount] = screenValue;
+        screen.textContent= calculate(inputNumbers, inputOperators);
+        return;
+    }
+    else if(Number.isInteger(input*1)){
+        passNumber(input);
+    }
+    else if(input==="+" || input==="-" || input==="*" || input==="=" || input==="/" || input==="c"){
+        passOperator(input);
+    }else{return;}
+}
+
 
 function calculate(numbers, operators){
     // console.log(numbers);
     // console.log(operators);
     //divide
-    operatorIndex = operators.indexOf("divide");
+    operatorIndex = operators.indexOf("/");
     while(operatorIndex != -1){
         calculated = operate(numbers[operatorIndex], numbers[operatorIndex+1], "/");
         operators.splice(operatorIndex, 1);
         numbers.splice(operatorIndex, 1);
         numbers[operatorIndex]=calculated;
-        operatorIndex = operators.indexOf("divide");
+        operatorIndex = operators.indexOf("/");
         console.log(calculated);
     }
     //multiply
-    operatorIndex = operators.indexOf("multiply");
+    operatorIndex = operators.indexOf("*");
     while(operatorIndex != -1){
         calculated = operate(numbers[operatorIndex], numbers[operatorIndex+1], "*");
         operators.splice(operatorIndex, 1);
         numbers.splice(operatorIndex, 1);
         numbers[operatorIndex]=calculated;
-        operatorIndex = operators.indexOf("multiply");
+        operatorIndex = operators.indexOf("*");
         console.log(calculated);
         console.log(operatorIndex);
     }
     //add
-    operatorIndex = operators.indexOf("add");
+    operatorIndex = operators.indexOf("+");
     while(operatorIndex != -1){
         console.log(operators);
         console.log(numbers);
@@ -83,18 +113,18 @@ function calculate(numbers, operators){
         operators.splice(operatorIndex, 1);
         numbers.splice(operatorIndex, 1);
         numbers[operatorIndex]=calculated;
-        operatorIndex = operators.indexOf("add");
+        operatorIndex = operators.indexOf("+");
         console.log(operatorIndex);
         console.log(calculated);
     }
     //subtract
-    operatorIndex = operators.indexOf("subtract");
+    operatorIndex = operators.indexOf("-");
     while(operatorIndex != -1){
         calculated = operate(numbers[operatorIndex], numbers[operatorIndex+1], "-");
         operators.splice(operatorIndex, 1);
         numbers.splice(operatorIndex, 1);
         numbers[operatorIndex]=calculated;
-        operatorIndex = operators.indexOf("subtract");
+        operatorIndex = operators.indexOf("-");
         console.log(calculated);
     }
     console.log(`Result:${calculated}`)
